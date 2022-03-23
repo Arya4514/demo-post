@@ -44,7 +44,7 @@ Sequelize is used to handle database connection and table creations
 
 ### Password Encryption
 
- To store password encrypted bcryptjs was used.
+ To store password encrypted. bcryptjs was used.
 
 [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
