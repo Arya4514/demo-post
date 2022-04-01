@@ -60,3 +60,14 @@ Sequelize is used to handle database connection and table creations
  Image where stored in nodejs using multer middleware which handles the form data  
 
 [multer](https://www.npmjs.com/package/multer)
+
+### Payment GateWay Stripe
+
+Change Public Key (PUBLIC_KEY) & Secret Key (SECRET_KEY) with yours
+
+[Payment Form Link](http://localhost:8079/payment/)
+
+
+### Email Using NodeMailer
+
+create email at [ethereal](https://ethereal.email/create) and replace credentials at environments according to env.

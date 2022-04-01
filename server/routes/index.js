@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require("./user");
 const Authentication = require("./auth");
 const Post = require("./post");
+const Payment = require("./payment");
+
 
 
 
@@ -14,7 +16,8 @@ router.use(
     "/",
     Authentication,
     User,
-    Post
+    Post,
+    Payment
 );
 
 module.exports = router;

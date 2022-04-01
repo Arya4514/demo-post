@@ -1,6 +1,7 @@
 'use strict';
 
 const db = require('../models');
+const email = require('../utils/email');
 const role = require('../utils/role');
 const utils = require('../utils/utils');
 
@@ -42,7 +43,7 @@ module.exports = {
 
     signUp: async (req, res) => {
 
-        if (!req.body.user_name || !req.body.phone || !req.body.password) {
+        if (!req.body.user_name || !req.body.phone_number || !req.body.password) {
             return res.status(401).json({ message: "Please provide all values", statusCode: res.statusCode, error: true });
         }
 
@@ -60,6 +61,8 @@ module.exports = {
                 req.body.role = role.USER
 
                 user = await db.user.create(req.body);
+
+                await email.signupEmail(user)
 
                 return res.status(200).json({ message: "Sign Up successfully", statusCode: res.statusCode, error: false });
             }

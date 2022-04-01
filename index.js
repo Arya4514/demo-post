@@ -32,6 +32,8 @@ async function initial() {
 }
 app.use('/uploads', express.static('uploads'));
 
+app.use('/payment', express.static('public'));
+
 app.use("/api", indexRouter);
 
 db.sequelize.sync({ force: false, alter: false }).then(() => {

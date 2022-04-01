@@ -12,6 +12,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: true,
         },
+        email: {
+            type: Sequelize.TEXT,
+            allowNull: true,
+        },
         phone_number: {
             type: Sequelize.TEXT,
             allowNull: true,
