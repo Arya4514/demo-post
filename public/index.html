@@ -11,41 +11,74 @@
     </link>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <style>
+        input[type=number] {
+            width: "50px";
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .div {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        #amountButton {
+            background-color: #682e9a;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body>
     <form id="payment-form">
-
-        <label for="amount">Amount (Rs.) :</label><br>
-        <!-- <input type="number" id="amount" name="amount" onchange="amount()"> -->
-        <input type="number" id="amount" value="0" onchange="amountSubmit()">
-
-        <div id="card-element">
-        </div>
-        <div id="pay" style="display: none;">
-            <button id="submit">
-
-                <div class="spinner hidden" id="spinner"></div>
-                <span id="button-text">Pay</span>
-            </button>
-        </div>
-        <p id="card-error" role="alert"></p>
-        <p class="result-message hidden">
-            Payment succeeded, see the result in your
-            <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
-        </p>
-        <div id="paymentIntent">
-
+        <div class="div">
+            <div id="amountDiv" style="display: block;">
+                <label for="amount">Amount (Rs.) :</label><br>
+                <!-- <input type="number" id="amount" name="amount" onchange="amount()"> -->
+                <input type="number" id="amount" required>
+                <a id="amountButton" onclick="amountSubmit()">Submit</a>
+            </div>
+            <div id="card-element">
+            </div>
+            <div id="pay" style="display: none;">
+                <button id="submit">
+                    <div class="spinner hidden" id="spinner"></div>
+                    <span id="button-text">Pay</span>
+                </button>
+            </div>
+            <p id="card-error" role="alert"></p>
+            <p class="result-message hidden">
+                Payment succeeded, see the result in your
+                <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+            </p>
+            <div id="paymentIntent">
+                <a id="payment-slip" style="display: none;" href="" target="_blank">Payment Slip</a>
+                <pre id="json"></pre>
+            </div>
         </div>
     </form>
 </body>
 <script>
     var stripe = Stripe("PUBLIC_KEY");
     function amountSubmit() {
+        document.getElementById("amountDiv").style.pointerEvents = 'none';
+        document.getElementById("amountDiv").style.opacity = 0.5;
 
         let price = document.getElementById('amount').value
-        console.log(price)
-        debugger
+        if (price == 0) {
+            alert('please enter valid Amount')
+        }
         document.querySelector("button").disabled = true;
         fetch("/api/create-payment-intent", {
             method: "POST",
@@ -135,7 +168,8 @@
                 return result.json();
             })
             .then(function (data) {
-                document.getElementById("paymentIntent").textContent = JSON.stringify(data, undefined, 2);
+                document.getElementById("payment-slip").href = data.transaction.charges.data[0].receipt_url;
+                document.getElementById("payment-slip").style.display = "block";
                 document.querySelector(".result-message").classList.remove("hidden");
                 document.querySelector("button").disabled = true;
             });
